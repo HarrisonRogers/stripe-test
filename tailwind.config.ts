@@ -17,4 +17,7 @@ export default {
     },
   },
   plugins: [daisyui, tailwindTypography],
+  daisyui: {
+    themes: true, // This enables all themes
+  },
 } satisfies Config;
