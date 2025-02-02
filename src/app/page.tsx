@@ -1,3 +1,9 @@
+import CheckoutButton from './checkoutButton';
+
 export default function Home() {
-  return <div>Hello World</div>;
+  return (
+    <div>
+      <CheckoutButton />
+    </div>
+  );
 }

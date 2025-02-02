@@ -16,7 +16,7 @@ export async function POST(request: Request) {
           price: priceId,
         },
         {
-          price: 'price_1OtHdOBF7AptWZlcPmLotZgW',
+          price: 'price_1QnvHqRxK0nvB857ft2fpuhZ',
           quantity: 1,
         },
       ],
@@ -27,9 +27,11 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ id: session.id }, { status: 200 });
   } catch (error) {
-    console.error(error);
+    console.error('Stripe API Error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      {
+        error: error instanceof Error ? error.message : 'Internal server error',
+      },
       { status: 500 }
     );
   }
