@@ -78,6 +78,42 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if (event.type === 'customer.subscription.updated') {
+      const subscription: Stripe.Subscription = event.data.object;
+      console.log(subscription);
+
+      const { error } = await supabase
+        .from('stripe_customers')
+        .update({ plan_expires: subscription.cancel_at })
+        .eq('subscription_id', subscription.id);
+
+      if (error) {
+        console.error('Error updating stripe_customers table:', error);
+        return NextResponse.json(
+          { error: 'Error updating stripe_customers table' },
+          { status: 500 }
+        );
+      }
+    }
+
+    if (event.type === 'customer.subscription.deleted') {
+      const subscription: Stripe.Subscription = event.data.object;
+      console.log(subscription);
+
+      const { error } = await supabase
+        .from('stripe_customers')
+        .update({ plan_expires: false, subscription_id: null })
+        .eq('subscription_id', subscription.id);
+
+      if (error) {
+        console.error('Error updating stripe_customers table:', error);
+        return NextResponse.json(
+          { error: 'Error updating stripe_customers table' },
+          { status: 500 }
+        );
+      }
+    }
+
     return NextResponse.json(
       { message: 'Webhook processed successfully' },
       { status: 200 }
